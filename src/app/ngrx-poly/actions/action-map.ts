@@ -72,7 +72,7 @@ export interface ActionMapD1<T, U extends string> {
   deleteFailure: ErrorAction
 
   select: ActionWithIdD1
-  deselect: ActionCreator<string, FunctionWithParametersType<any[], object>>
+  deselect: ActionCreator<string, () => TypedAction<string>>
 
   _entity: U
 }
@@ -103,7 +103,7 @@ export interface ActionMapD2<T, U, Tkey extends string, Ukey extends string> {
   deleteFailure: ErrorAction
 
   select: ActionWithIdD1
-  deselect: ActionCreator<string, FunctionWithParametersType<any[], object>>
+  deselect: ActionCreator<string, () => TypedAction<string>>
 
   _parent: Tkey
   _entity: Ukey

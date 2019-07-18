@@ -1,6 +1,38 @@
 import { depthOne } from './depth-one-action-map'
+import { Store } from '@ngrx/store'
 
 describe('depthOne action map', () => {
+  describe('type checks', () => {
+    const actionMap = depthOne(null)('user')
+    const mockStore: Partial<Store<any>> = {
+      dispatch: action => {},
+    }
+    it('should do absolutely nothing (this is just a compiler check to make sure actions can be dispatched)', () => {
+      expect(() => {
+        mockStore.dispatch(actionMap.findAll({}))
+        mockStore.dispatch(actionMap.findAllSuccess({ rows: [], pagination: null }))
+        mockStore.dispatch(actionMap.findAllFailure({}))
+        mockStore.dispatch(actionMap.search({}))
+        mockStore.dispatch(actionMap.searchSuccess({ rows: [], pagination: null }))
+        mockStore.dispatch(actionMap.searchFailure({}))
+        mockStore.dispatch(actionMap.findOne('str'))
+        mockStore.dispatch(actionMap.findOneSuccess({}))
+        mockStore.dispatch(actionMap.findOneFailure({}))
+        mockStore.dispatch(actionMap.update({}))
+        mockStore.dispatch(actionMap.updateSuccess({}))
+        mockStore.dispatch(actionMap.updateFailure({}))
+        mockStore.dispatch(actionMap.create({}))
+        mockStore.dispatch(actionMap.createSuccess({}))
+        mockStore.dispatch(actionMap.createFailure({}))
+        mockStore.dispatch(actionMap.delete('str'))
+        mockStore.dispatch(actionMap.deleteSuccess({}))
+        mockStore.dispatch(actionMap.deleteFailure({}))
+        mockStore.dispatch(actionMap.select('str'))
+        mockStore.dispatch(actionMap.deselect())
+      }).not.toThrowError()
+    })
+  })
+
   describe('root', () => {
     const actionMap = depthOne(null)('user')
 
