@@ -1,3 +1,3 @@
-import { createFeatureActionMap } from '../../../../ngrx-poly'
+import { createActionMap } from '../../../../ngrx-poly'
 
-export const homeActionsCreator = createFeatureActionMap('home')
+export const homeActionsCreator = createActionMap('home')

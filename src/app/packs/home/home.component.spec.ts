@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing'
 
 // Home Component
 import { HomeComponent } from './home.component'
+import { StoreModule } from '@ngrx/store'
+import * as fromHome from './store/reducers'
 
 describe('HomeComponent', () => {
   let component: HomeComponent
@@ -11,10 +13,12 @@ describe('HomeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature('home', fromHome.reducers),
         // other imports
       ],
-      declarations: [ HomeComponent ]
+      declarations: [HomeComponent],
     }).compileComponents()
   }))
 

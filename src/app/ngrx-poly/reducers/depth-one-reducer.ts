@@ -3,23 +3,17 @@ import { ActionMapD1 } from '../actions/action-map'
 import { defaultInitialState, PolyState } from './state'
 import { reduceEntityArray } from '../utils/reduce-entity-array'
 import { removeFromObj, removeFromArray } from './utils'
+import { On } from '@ngrx/store/src/reducer_creator'
 
 export function depthOneReducerCreator<T extends object, Tkey extends string>(
   actionMap: ActionMapD1<T, Tkey>,
-  keyGetter: (entity: T) => string | number
+  keyGetter: (entity: T) => string | number,
+  ...ons: On<PolyState<T>>[]
 ) {
   const entity = actionMap._entity
   return createReducer(
     defaultInitialState,
-    on(actionMap.findAll, actionMap.search, (state, payload: { [key: string]: any }) => ({
-      ...state,
-      loaded: false,
-      loading: true,
-      filter: payload.filter || state.filter,
-      sort: payload.sort || state.sort,
-      includes: payload.includes || state.includes,
-    })),
-    on(actionMap.findOne, actionMap.create, actionMap.update, actionMap.delete, state => ({
+    on(actionMap.findAll, actionMap.search, actionMap.findOne, actionMap.create, actionMap.update, actionMap.delete, state => ({
       ...state,
       loaded: false,
       loading: true,
@@ -78,7 +72,6 @@ export function depthOneReducerCreator<T extends object, Tkey extends string>(
         ...mergeObj,
         ids,
         entities,
-        selectedId: null,
         loaded: true,
         loading: false,
       }
@@ -92,7 +85,7 @@ export function depthOneReducerCreator<T extends object, Tkey extends string>(
       actionMap.deleteFailure,
       (state, payload) => ({
         ...state,
-        error: payload,
+        error: payload.error,
         loaded: true,
         loading: false,
       })
@@ -104,6 +97,7 @@ export function depthOneReducerCreator<T extends object, Tkey extends string>(
     on(actionMap.deselect, state => ({
       ...state,
       selectedId: null,
-    }))
+    })),
+    ...ons
   )
 }

@@ -1,6 +1,6 @@
-import { ActionReducerMap } from '@ngrx/store'
+import { ActionReducerMap, createFeatureSelector } from '@ngrx/store'
 import * as fromHome from './home'
-import { PolyState } from '../../../../ngrx-poly-wip'
+import { PolyState, createSelectors } from '../../../../ngrx-poly'
 import { Todo } from '../../models/Todo'
 
 /**
@@ -16,3 +16,7 @@ export interface State {
 export const reducers: ActionReducerMap<State> = {
   home: fromHome.reducer,
 }
+
+export const getHomeState = createFeatureSelector<State>('home')
+
+export const todos = createSelectors<Todo>(getHomeState, 'home')

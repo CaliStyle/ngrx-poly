@@ -16,6 +16,7 @@ export class HomeEffects {
 
   findAll$ = this.effects.findAll
   findOne$ = this.effects.findOne
+  delete$ = this.effects.delete
 
   constructor(private homeService: HomeDataService, private actions$: Actions) {}
 }

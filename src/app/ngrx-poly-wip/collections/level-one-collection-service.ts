@@ -7,7 +7,7 @@ import { PolyState } from '../config/config'
 import { NgrxPolyHelperService } from '../config/helper'
 import { LevelOneDataServiceBase } from '../data/level-one-data-service'
 import { selectors } from '../reducers/selectors'
-import { Pagination } from '../types/pagination'
+import { Pagination } from '../../ngrx-poly/types/pagination'
 
 @Injectable()
 export class LevelOneCollectionServiceBase<T> {

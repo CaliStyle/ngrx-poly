@@ -8,7 +8,5 @@ import { UsersCollectionService } from './store/collections/users'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiveZeroZeroComponent {
-  constructor(public usersService: UsersCollectionService) {
-    usersService.findAll({})
-  }
+  constructor() {}
 }

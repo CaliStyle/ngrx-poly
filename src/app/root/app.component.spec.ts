@@ -3,8 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing'
 import { Router } from '@angular/router'
 import { Location } from '@angular/common'
 
-import { IntercomModule } from '../ng-intercom/intercom.module'
-
 // Shared Module
 import { SharedModule } from '../shared/shared.module'
 // For Material
@@ -12,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 // Component to Test
 import { AppComponent } from './app.component'
-
+import { StoreModule } from '@ngrx/store'
 
 describe('AppComponent', () => {
   let component: AppComponent
@@ -22,18 +20,9 @@ describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        IntercomModule.forRoot({
-          appId: 'klwzj86j',
-          updateOnRouterChange: true
-        }),
-        SharedModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [ AppComponent ]
-    })
-      .compileComponents()
+      imports: [RouterTestingModule.withRoutes([]), SharedModule, BrowserAnimationsModule, StoreModule],
+      declarations: [AppComponent],
+    }).compileComponents()
   }))
 
   beforeEach(() => {

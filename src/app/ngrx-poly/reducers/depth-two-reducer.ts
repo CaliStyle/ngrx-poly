@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store'
+import { On } from '@ngrx/store/src/reducer_creator'
 import { ActionMapD2 } from '../actions/action-map'
 import { reduceEntityArray } from '../utils/reduce-entity-array'
 import { defaultInitialState, PolyState } from './state'
@@ -6,20 +7,13 @@ import { removeFromArray, removeFromObj } from './utils'
 
 export function depthTwoReducerCreator<T extends object, U extends object, Tkey extends string, Ukey extends string>(
   actionMap: ActionMapD2<T, U, Tkey, Ukey>,
-  keyGetter: (entity: U) => string | number
+  keyGetter: (entity: U) => string | number,
+  ...ons: On<PolyState<U>>[]
 ) {
   const entity = actionMap._entity
   return createReducer(
     defaultInitialState,
-    on(actionMap.findAll, actionMap.search, (state, payload: { [key: string]: any }) => ({
-      ...state,
-      loaded: false,
-      loading: true,
-      filter: payload.filter || state.filter,
-      sort: payload.sort || state.sort,
-      includes: payload.includes || state.includes,
-    })),
-    on(actionMap.findOne, actionMap.create, actionMap.update, actionMap.delete, state => ({
+    on(actionMap.findAll, actionMap.search, actionMap.findOne, actionMap.create, actionMap.update, actionMap.delete, state => ({
       ...state,
       loaded: false,
       loading: true,
@@ -49,7 +43,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
       const newEntity = (payload[entity] as unknown) as U
       const selectedId = keyGetter(newEntity)
 
-      const entities = { ...state.entities, [selectedId]: payload }
+      const entities = { ...state.entities, [selectedId]: newEntity }
       const ids = [...state.ids, selectedId]
 
       return {
@@ -78,7 +72,6 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
         ...mergeObj,
         ids,
         entities,
-        selectedId: null,
         loaded: true,
         loading: false,
       }
@@ -92,7 +85,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
       actionMap.deleteFailure,
       (state, payload) => ({
         ...state,
-        error: payload,
+        error: payload.error,
         loaded: true,
         loading: false,
       })
@@ -104,6 +97,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
     on(actionMap.deselect, state => ({
       ...state,
       selectedId: null,
-    }))
+    })),
+    ...ons
   )
 }

@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store'
 import { PolyState } from '../config/config'
-import { Pagination } from '../types/pagination'
+import { Pagination } from '../../ngrx-poly/types/pagination'
 
 export function selectors<T>() {
   const getLoaded = (state: PolyState<T>) => state.loaded

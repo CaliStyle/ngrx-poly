@@ -7,9 +7,13 @@ interface FeatureActionMaps {
   depthTwo: <T, U, V extends string, W extends string>(parent: V, entity: W) => ActionMapD2<T, U, V, W>
 }
 
-export function createFeatureActionMap(feature: string = ''): FeatureActionMaps {
+export function createActionMap(feature: string): FeatureActionMaps {
   return {
     depthOne: depthOne(feature),
     depthTwo: depthTwo(feature),
   }
+}
+
+export function createRootActionMap() {
+  return createActionMap(null)
 }

@@ -15,34 +15,46 @@ export function depthOneEffectCreators<T, U extends string>(
     findAll: createEffect(() =>
       actions$.pipe(
         ofType(actionMap.findAll),
-        mergeMap(action =>
-          dataService.findAll(action.query).pipe(
-            map(data => actionMap.findAllSuccess(data)),
-            catchError(error => of(actionMap.findAllFailure(error)))
-          )
-        )
+        mergeMap(action => {
+          try {
+            return dataService.findAll(action.query).pipe(
+              map(data => actionMap.findAllSuccess(data)),
+              catchError(error => of(actionMap.findAllFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.findAllFailure(e))
+          }
+        })
       )
     ),
     search: createEffect(() =>
       actions$.pipe(
         ofType(actionMap.search),
-        mergeMap(action =>
-          dataService.search(action.query).pipe(
-            map(data => actionMap.searchSuccess(data)),
-            catchError(error => of(actionMap.searchFailure(error)))
-          )
-        )
+        mergeMap(action => {
+          try {
+            return dataService.search(action.query).pipe(
+              map(data => actionMap.searchSuccess(data)),
+              catchError(error => of(actionMap.searchFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.searchFailure(e))
+          }
+        })
       )
     ),
     findOne: createEffect(() =>
       actions$.pipe(
         ofType(actionMap.findOne),
-        mergeMap(action =>
-          dataService.findOne(action.id).pipe(
-            map(data => actionMap.findOneSuccess(data)),
-            catchError(error => of(actionMap.findOneFailure(error)))
-          )
-        )
+        mergeMap(action => {
+          try {
+            return dataService.findOne(action.id).pipe(
+              map(data => actionMap.findOneSuccess(data)),
+              catchError(error => of(actionMap.findOneFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.findOneFailure(e))
+          }
+        })
       )
     ),
 
@@ -64,11 +76,15 @@ export function depthOneEffectCreators<T, U extends string>(
       actions$.pipe(
         ofType(actionMap.update),
         mergeMap(action => {
-          const entity = (action[actionMap._entity] as unknown) as T
-          return dataService.update(entity).pipe(
-            map(data => actionMap.updateSuccess(data)),
-            catchError(error => of(actionMap.updateFailure(error)))
-          )
+          try {
+            const entity = (action[actionMap._entity] as unknown) as T
+            return dataService.update(entity).pipe(
+              map(data => actionMap.updateSuccess(data)),
+              catchError(error => of(actionMap.updateFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.updateFailure(e))
+          }
         })
       )
     ),
@@ -76,12 +92,16 @@ export function depthOneEffectCreators<T, U extends string>(
     delete: createEffect(() =>
       actions$.pipe(
         ofType(actionMap.delete),
-        mergeMap(action =>
-          dataService.delete(action.id).pipe(
-            map(data => actionMap.deleteSuccess(data)),
-            catchError(error => of(actionMap.deleteFailure(error)))
-          )
-        )
+        mergeMap(action => {
+          try {
+            return dataService.delete(action.id).pipe(
+              map(data => actionMap.deleteSuccess(data)),
+              catchError(error => of(actionMap.deleteFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.deleteFailure(e))
+          }
+        })
       )
     ),
   }

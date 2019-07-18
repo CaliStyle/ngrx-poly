@@ -1,10 +1,10 @@
 {
   "name": "ngrx-poly",
-  "version": "8.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CaliStyle/ng-intercom.git"
+    "url": "git+https://github.com/CaliStyle/ngrx-poly.git"
   },
   "keywords": [
     "NgRx",
@@ -13,9 +13,9 @@
   ],
   "author": "wbhob",
   "bugs": {
-    "url": "https://github.com/CaliStyle/ng-intercom/issues"
+    "url": "https://github.com/CaliStyle/ngrx-poly/issues"
   },
-  "homepage": "https://github.com/CaliStyle/ng-intercom#readme",
+  "homepage": "https://github.com/CaliStyle/ngrx-poly#readme",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
@@ -102,6 +102,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "karma-spec-reporter": "0.0.32",
     "mocha": "^5.2.0",
     "ng-engine": "^7.1.0",
     "ng-packagr": "^5.1.0",
