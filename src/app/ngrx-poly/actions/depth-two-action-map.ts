@@ -40,37 +40,45 @@ export function depthTwo(feature: string) {
       ),
       findOneFailure: createAction(createActionType(Op.FIND_ONE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
 
-      update: createAction(createActionType(Op.UPDATE, feature, parent, entity), (parentItem: T, item: U) =>
+      addOne: createAction(createActionType(Op.ADD_ONE, feature, parent, entity), (parentItem: T, item: U) =>
         mapObjToPayloadD2(parent, entity, parentItem, item)
       ),
-      updateSuccess: createAction(createActionType(Op.UPDATE_SUCCESS, feature, parent, entity), (item: U) =>
+      addOneSuccess: createAction(createActionType(Op.ADD_ONE_SUCCESS, feature, parent, entity), (item: U) =>
         mapObjToPayloadD1(entity, item)
       ),
-      updateFailure: createAction(createActionType(Op.UPDATE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
+      addOneFailure: createAction(createActionType(Op.ADD_ONE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
 
-      create: createAction(createActionType(Op.CREATE, feature, parent, entity), (parentItem: T, item: U) =>
+      addMany: createAction(createActionType(Op.ADD_MANY, feature, parent, entity), (parentItem: T, items: U[]) =>
+        mapObjToPayloadD2(parent, entity, parentItem, items)
+      ),
+      addManySuccess: createAction(createActionType(Op.ADD_MANY_SUCCESS, feature, parent, entity), props<List<U>>()
+      ),
+      addManyFailure: createAction(createActionType(Op.ADD_MANY_FAILURE, feature, parent, entity), (error: any) => ({ error })),
+
+
+      createAndAdd: createAction(createActionType(Op.CREATE_AND_ADD, feature, parent, entity), (parentItem: T, item: U) =>
         mapObjToPayloadD2(parent, entity, parentItem, item)
       ),
-      createSuccess: createAction(createActionType(Op.CREATE_SUCCESS, feature, parent, entity), (item: U) =>
+      createAndAddSuccess: createAction(createActionType(Op.CREATE_AND_ADD_SUCCESS, feature, parent, entity), (item: U) =>
         mapObjToPayloadD1(entity, item)
       ),
-      createFailure: createAction(createActionType(Op.CREATE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
+      createAndAddFailure: createAction(createActionType(Op.CREATE_AND_ADD_FAILURE, feature, parent, entity), (error: any) => ({ error })),
 
-      delete: createAction(
-        createActionType(Op.DELETE, feature, parent, entity),
+      remove: createAction(
+        createActionType(Op.REMOVE, feature, parent, entity),
         (parentItem: T, id: string | number) =>
           ({
             [parent]: parentItem,
             id,
           } as any)
       ),
-      deleteSuccess: createAction(createActionType(Op.DELETE_SUCCESS, feature, parent, entity), (item: U) =>
+      removeSuccess: createAction(createActionType(Op.REMOVE_SUCCESS, feature, parent, entity), (item: U) =>
         mapObjToPayloadD1(entity, item)
       ),
-      deleteFailure: createAction(createActionType(Op.DELETE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
+      removeFailure: createAction(createActionType(Op.REMOVE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
 
-      select: createAction(createActionType(Op.SELECT, feature, parent, entity), (id: string | number) => ({ id })),
-      deselect: createAction(createActionType(Op.DESELECT, feature, parent, entity)),
+      // select: createAction(createActionType(Op.SELECT, feature, parent, entity), (id: string | number) => ({ id })),
+      // deselect: createAction(createActionType(Op.DESELECT, feature, parent, entity)),
 
       _parent: parent,
       _entity: entity,

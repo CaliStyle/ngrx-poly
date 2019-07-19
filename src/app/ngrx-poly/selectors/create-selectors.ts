@@ -57,16 +57,25 @@ function baseCreateSelectors<T>(
 ): SelectorMap<T> {
   let getSelected
 
+  const getStateEntities = createSelector(
+    getState,
+    getEntities
+  )
+
   if (selectedIdSelector) {
     getSelected = createSelector(
-      getEntities,
+      getStateEntities,
       selectedIdSelector,
       (entities, selectedId) => entities[selectedId]
     )
   } else {
+    const getStateSelectedId = createSelector(
+      getState,
+      getSelectedId
+    )
     getSelected = createSelector(
-      getEntities,
-      getSelectedId,
+      getStateEntities,
+      getStateSelectedId,
       (entities, selectedId) => entities[selectedId]
     )
   }
@@ -89,13 +98,11 @@ function baseCreateSelectors<T>(
       getState,
       getPagination
     ),
-    getEntities: createSelector(
+    getError: createSelector(
       getState,
-      getEntities
+      state => state.error
     ),
-    getSelected: createSelector(
-      getState,
-      getSelected
-    ),
+    getEntities: getStateEntities,
+    getSelected: getSelected,
   }
 }

@@ -11,13 +11,22 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
   ...ons: On<PolyState<U>>[]
 ) {
   const entity = actionMap._entity
-  return createReducer(
+  return createReducer<PolyState<U>>(
     defaultInitialState,
-    on(actionMap.findAll, actionMap.search, actionMap.findOne, actionMap.create, actionMap.update, actionMap.delete, state => ({
-      ...state,
-      loaded: false,
-      loading: true,
-    })),
+    on(
+      actionMap.findAll,
+      actionMap.search,
+      actionMap.findOne,
+      actionMap.createAndAdd,
+      actionMap.addOne,
+      actionMap.addMany,
+      actionMap.remove,
+      state => ({
+        ...state,
+        loaded: false,
+        loading: true,
+      })
+    ),
     on(actionMap.findAllSuccess, actionMap.searchSuccess, (state, action) => {
       const rows: U[] = action.rows
       const pagination = action.pagination
@@ -39,7 +48,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
         sort: pagination.sort,
       }
     }),
-    on(actionMap.findOneSuccess, actionMap.createSuccess, actionMap.updateSuccess, (state, payload) => {
+    on(actionMap.findOneSuccess, actionMap.createAndAddSuccess, actionMap.addOneSuccess, (state, payload) => {
       const newEntity = (payload[entity] as unknown) as U
       const selectedId = keyGetter(newEntity)
 
@@ -55,7 +64,20 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
         loading: false,
       }
     }),
-    on(actionMap.deleteSuccess, (state, payload) => {
+    on(actionMap.addManySuccess, (state, payload) => {
+      const newEntities = payload.rows
+
+      const { entities, ids } = reduceEntityArray(newEntities, keyGetter, state.entities)
+
+      return {
+        ...state,
+        ids,
+        entities,
+        loaded: true,
+        loading: false,
+      }
+    }),
+    on(actionMap.removeSuccess, (state, payload) => {
       const entityToRemove = (payload[entity] as unknown) as U
       const idToRemove = keyGetter(entityToRemove)
 
@@ -80,9 +102,10 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
       actionMap.findAllFailure,
       actionMap.searchFailure,
       actionMap.findOneFailure,
-      actionMap.createFailure,
-      actionMap.updateFailure,
-      actionMap.deleteFailure,
+      actionMap.createAndAddFailure,
+      actionMap.addOneFailure,
+      actionMap.addManyFailure,
+      actionMap.removeFailure,
       (state, payload) => ({
         ...state,
         error: payload.error,
@@ -90,14 +113,14 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
         loading: false,
       })
     ),
-    on(actionMap.select, (state, payload) => ({
-      ...state,
-      selectedId: payload.id,
-    })),
-    on(actionMap.deselect, state => ({
-      ...state,
-      selectedId: null,
-    })),
+    // on(actionMap.select, (state, payload) => ({
+    //   ...state,
+    //   selectedId: payload.id,
+    // })),
+    // on(actionMap.deselect, state => ({
+    //   ...state,
+    //   selectedId: null,
+    // })),
     ...ons
   )
 }

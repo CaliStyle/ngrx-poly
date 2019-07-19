@@ -11,7 +11,7 @@ export function depthOneReducerCreator<T extends object, Tkey extends string>(
   ...ons: On<PolyState<T>>[]
 ) {
   const entity = actionMap._entity
-  return createReducer(
+  return createReducer<PolyState<T>>(
     defaultInitialState,
     on(actionMap.findAll, actionMap.search, actionMap.findOne, actionMap.create, actionMap.update, actionMap.delete, state => ({
       ...state,

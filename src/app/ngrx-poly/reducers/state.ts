@@ -15,7 +15,7 @@ export interface PolyState<T> {
   filter: any
   sort: [string[]]
   includes: string[] | null
-  error: string | null
+  error: any
 }
 
 export const defaultInitialState: PolyState<any> = {

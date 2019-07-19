@@ -46,6 +46,12 @@ type D2ActionWithEntity<T, U, Tkey extends string, Ukey extends string> = Functi
 > &
   TypedAction<string>
 
+  type D2ActionWithEntities<T, U, Tkey extends string, Ukey extends string> = FunctionWithParametersType<
+  [T, U[]],
+  { [x in Tkey]: T } & { [x in Ukey]: U[] } & TypedAction<string>
+> &
+  TypedAction<string>
+
 export interface ActionMapD1<T, U extends string> {
   findAll: QueryActionD1
   findAllSuccess: ActionCreator<string, (props: List<T>) => List<T> & TypedAction<string>>
@@ -90,20 +96,24 @@ export interface ActionMapD2<T, U, Tkey extends string, Ukey extends string> {
   findOneSuccess: D1ActionWithEntity<U, Ukey>
   findOneFailure: ErrorAction
 
-  create: D2ActionWithEntity<T, U, Tkey, Ukey>
-  createSuccess: D1ActionWithEntity<U, Ukey>
-  createFailure: ErrorAction
+  createAndAdd: D2ActionWithEntity<T, U, Tkey, Ukey>
+  createAndAddSuccess: D1ActionWithEntity<U, Ukey>
+  createAndAddFailure: ErrorAction
 
-  update: D2ActionWithEntity<T, U, Tkey, Ukey>
-  updateSuccess: D1ActionWithEntity<U, Ukey>
-  updateFailure: ErrorAction
+  addOne: D2ActionWithEntity<T, U, Tkey, Ukey>
+  addOneSuccess: D1ActionWithEntity<U, Ukey>
+  addOneFailure: ErrorAction
 
-  delete: ActionWithIdD2<T, Tkey>
-  deleteSuccess: D1ActionWithEntity<U, Ukey>
-  deleteFailure: ErrorAction
+  addMany: D2ActionWithEntities<T, U, Tkey, Ukey>
+  addManySuccess: ActionCreator<string, (props: List<U>) => List<U> & TypedAction<string>>
+  addManyFailure: ErrorAction
 
-  select: ActionWithIdD1
-  deselect: ActionCreator<string, () => TypedAction<string>>
+  remove: ActionWithIdD2<T, Tkey>
+  removeSuccess: D1ActionWithEntity<U, Ukey>
+  removeFailure: ErrorAction
+
+  // select: ActionWithIdD1
+  // deselect: ActionCreator<string, () => TypedAction<string>>
 
   _parent: Tkey
   _entity: Ukey

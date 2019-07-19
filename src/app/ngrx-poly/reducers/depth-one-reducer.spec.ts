@@ -1,7 +1,7 @@
 import { createAction, on } from '@ngrx/store'
 import { createRootActionMap } from '../actions/create-action-map'
 import { depthOneReducerCreator } from './depth-one-reducer'
-import { defaultInitialState } from './state'
+import { defaultInitialState, PolyState } from './state'
 
 const demoUser = {
   id: 'test-id',
@@ -428,7 +428,7 @@ describe('DepthOne Reducer', () => {
   })
 
   it('should reduce failure actions', () => {
-    const errorState = {
+    const errorState: PolyState<any> = {
       entities: {},
       ids: [],
 

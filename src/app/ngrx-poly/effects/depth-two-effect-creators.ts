@@ -1,16 +1,15 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { Action } from '@ngrx/store'
-import { Observable, of } from 'rxjs'
+import { of } from 'rxjs'
 import { catchError, map, mergeMap } from 'rxjs/operators'
 import { ActionMapD2 } from '../actions/action-map'
 import { DepthTwoDataServiceBase } from './depth-two-data-service'
-import { EffectsMap } from './effects-map'
+import { EffectsMapD2 } from './effects-map'
 
 export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends string>(
   actionMap: ActionMapD2<T, U, Tkey, Ukey>,
   actions$: Actions,
   dataService: DepthTwoDataServiceBase<T, U>
-): EffectsMap {
+): EffectsMapD2 {
   return {
     findAll: createEffect(() =>
       actions$.pipe(
@@ -63,53 +62,72 @@ export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends s
       )
     ),
 
-    create: createEffect(() =>
+    createAndAdd: createEffect(() =>
       actions$.pipe(
-        ofType(actionMap.create),
+        ofType(actionMap.createAndAdd),
         mergeMap(action => {
           try {
             const parent = (action[actionMap._parent] as unknown) as T
             const entity = (action[actionMap._entity] as unknown) as U
-            return dataService.create(parent, entity).pipe(
-              map(data => actionMap.createSuccess(data)),
-              catchError(error => of(actionMap.createFailure(error)))
+            return dataService.createAndAdd(parent, entity).pipe(
+              map(data => actionMap.createAndAddSuccess(data)),
+              catchError(error => of(actionMap.createAndAddFailure(error)))
             )
           } catch (e) {
-            return of(actionMap.createFailure(e))
+            return of(actionMap.createAndAddFailure(e))
           }
         })
       )
     ),
 
-    update: createEffect(() =>
+    addOne: createEffect(() =>
       actions$.pipe(
-        ofType(actionMap.update),
+        ofType(actionMap.addOne),
         mergeMap(action => {
           try {
             const parent = (action[actionMap._parent] as unknown) as T
             const entity = (action[actionMap._entity] as unknown) as U
-            return dataService.update(parent, entity).pipe(
-              map(data => actionMap.updateSuccess(data)),
-              catchError(error => of(actionMap.updateFailure(error)))
+            return dataService.addOne(parent, entity).pipe(
+              map(data => actionMap.addOneSuccess(data)),
+              catchError(error => of(actionMap.addOneFailure(error)))
             )
           } catch (e) {
-            return of(actionMap.updateFailure(e))
+            return of(actionMap.addOneFailure(e))
           }
         })
       )
     ),
-    delete: createEffect(() =>
+
+    addMany: createEffect(() =>
       actions$.pipe(
-        ofType(actionMap.delete),
+        ofType(actionMap.addMany),
         mergeMap(action => {
           try {
             const parent = (action[actionMap._parent] as unknown) as T
-            return dataService.delete(parent, action.id).pipe(
-              map(data => actionMap.deleteSuccess(data)),
-              catchError(error => of(actionMap.deleteFailure(error)))
+            const entity = (action[actionMap._entity] as unknown) as U[]
+            return dataService.addMany(parent, entity).pipe(
+              map(data => actionMap.addManySuccess(data)),
+              catchError(error => of(actionMap.addManyFailure(error)))
             )
           } catch (e) {
-            return of(actionMap.deleteFailure(e))
+            return of(actionMap.addManyFailure(e))
+          }
+        })
+      )
+    ),
+
+    remove: createEffect(() =>
+      actions$.pipe(
+        ofType(actionMap.remove),
+        mergeMap(action => {
+          try {
+            const parent = (action[actionMap._parent] as unknown) as T
+            return dataService.remove(parent, action.id).pipe(
+              map(data => actionMap.removeSuccess(data)),
+              catchError(error => of(actionMap.removeFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.removeFailure(e))
           }
         })
       )

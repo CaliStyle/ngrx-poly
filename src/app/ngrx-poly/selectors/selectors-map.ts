@@ -1,4 +1,4 @@
-import { MemoizedSelector , Selector} from '@ngrx/store'
+import { MemoizedSelector, Selector } from '@ngrx/store'
 import { Pagination } from '../types/pagination'
 import { KeyMap } from '../types/keymap'
 import { PolyState } from '../reducers/state'
@@ -11,4 +11,5 @@ export interface SelectorMap<T> {
   getPagination: MemoizedSelector<object, Pagination>
   getEntities: MemoizedSelector<object, KeyMap<T>>
   getSelected: MemoizedSelector<object, T>
+  getError: MemoizedSelector<object, any>
 }

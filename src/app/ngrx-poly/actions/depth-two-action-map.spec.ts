@@ -20,17 +20,20 @@ describe('depthTwo action map', () => {
         mockStore.dispatch(actionMap.findOne({}, 'str'))
         mockStore.dispatch(actionMap.findOneSuccess({}))
         mockStore.dispatch(actionMap.findOneFailure({}))
-        mockStore.dispatch(actionMap.update({}, {}))
-        mockStore.dispatch(actionMap.updateSuccess({}))
-        mockStore.dispatch(actionMap.updateFailure({}))
-        mockStore.dispatch(actionMap.create({}, {}))
-        mockStore.dispatch(actionMap.createSuccess({}))
-        mockStore.dispatch(actionMap.createFailure({}))
-        mockStore.dispatch(actionMap.delete({}, 'str'))
-        mockStore.dispatch(actionMap.deleteSuccess({}))
-        mockStore.dispatch(actionMap.deleteFailure({}))
-        mockStore.dispatch(actionMap.select('str'))
-        mockStore.dispatch(actionMap.deselect())
+        mockStore.dispatch(actionMap.addOne({}, {}))
+        mockStore.dispatch(actionMap.addOneSuccess({}))
+        mockStore.dispatch(actionMap.addOneFailure({}))
+        mockStore.dispatch(actionMap.addMany({}, []))
+        mockStore.dispatch(actionMap.addManySuccess({ rows: [], pagination: null }))
+        mockStore.dispatch(actionMap.addManyFailure({}))
+        mockStore.dispatch(actionMap.createAndAdd({}, {}))
+        mockStore.dispatch(actionMap.createAndAddSuccess({}))
+        mockStore.dispatch(actionMap.createAndAddFailure({}))
+        mockStore.dispatch(actionMap.remove({}, 'str'))
+        mockStore.dispatch(actionMap.removeSuccess({}))
+        mockStore.dispatch(actionMap.removeFailure({}))
+        // mockStore.dispatch(actionMap.select('str'))
+        // mockStore.dispatch(actionMap.deselect())
       }).not.toThrowError()
     })
   })
@@ -104,67 +107,88 @@ describe('depthTwo action map', () => {
     })
 
     /**
-     * CREATE
+     * CREATE AND ADD
      */
-    it('should create create with payload', () => {
-      const create = actionMap.create(parentUser, { name: 'Joshua' })
-      expect(create.customer).toEqual({ name: 'Joshua' })
-      expect(create.type).toEqual('ngrx-poly/user/customer/create')
+    it('should create createAndAdd with payload', () => {
+      const createAndAdd = actionMap.createAndAdd(parentUser, { name: 'Joshua' })
+      expect(createAndAdd.customer).toEqual({ name: 'Joshua' })
+      expect(createAndAdd.type).toEqual('ngrx-poly/user/customer/create-and-add')
     })
 
-    it('should create createSuccess with payload', () => {
-      const createSuccess = actionMap.createSuccess({ name: 'Joshua' })
-      expect(createSuccess.customer).toEqual({ name: 'Joshua' })
-      expect(createSuccess.type).toEqual('ngrx-poly/user/customer/create-success')
+    it('should create createAndAddSuccess with payload', () => {
+      const createAndAddSuccess = actionMap.createAndAddSuccess({ name: 'Joshua' })
+      expect(createAndAddSuccess.customer).toEqual({ name: 'Joshua' })
+      expect(createAndAddSuccess.type).toEqual('ngrx-poly/user/customer/create-and-add-success')
     })
 
-    it('should create createFailure with error', () => {
-      const createFailure = actionMap.createFailure({ message: 'Failed' })
-      expect(createFailure.error).toEqual({ message: 'Failed' })
-      expect(createFailure.type).toEqual('ngrx-poly/user/customer/create-failure')
+    it('should create createAndAddFailure with error', () => {
+      const createAndAddFailure = actionMap.createAndAddFailure({ message: 'Failed' })
+      expect(createAndAddFailure.error).toEqual({ message: 'Failed' })
+      expect(createAndAddFailure.type).toEqual('ngrx-poly/user/customer/create-and-add-failure')
     })
 
     /**
-     * UPDATE
+     * ADD ONE
      */
-    it('should create update with payload', () => {
-      const update = actionMap.update(parentUser, { name: 'Joshua' })
-      expect(update.customer).toEqual({ name: 'Joshua' })
-      expect(update.type).toEqual('ngrx-poly/user/customer/update')
+    it('should create addOne with payload', () => {
+      const addOne = actionMap.addOne(parentUser, { name: 'Joshua' })
+      expect(addOne.customer).toEqual({ name: 'Joshua' })
+      expect(addOne.type).toEqual('ngrx-poly/user/customer/add-one')
     })
 
-    it('should create updateSuccess with payload', () => {
-      const updateSuccess = actionMap.updateSuccess({ name: 'Joshua' })
-      expect(updateSuccess.customer).toEqual({ name: 'Joshua' })
-      expect(updateSuccess.type).toEqual('ngrx-poly/user/customer/update-success')
+    it('should create addOneSuccess with payload', () => {
+      const addOneSuccess = actionMap.addOneSuccess({ name: 'Joshua' })
+      expect(addOneSuccess.customer).toEqual({ name: 'Joshua' })
+      expect(addOneSuccess.type).toEqual('ngrx-poly/user/customer/add-one-success')
     })
 
-    it('should create updateFailure with error', () => {
-      const updateFailure = actionMap.updateFailure({ message: 'Failed' })
-      expect(updateFailure.error).toEqual({ message: 'Failed' })
-      expect(updateFailure.type).toEqual('ngrx-poly/user/customer/update-failure')
+    it('should create addOneFailure with error', () => {
+      const addOneFailure = actionMap.addOneFailure({ message: 'Failed' })
+      expect(addOneFailure.error).toEqual({ message: 'Failed' })
+      expect(addOneFailure.type).toEqual('ngrx-poly/user/customer/add-one-failure')
+    })
+
+    /**
+     * ADD MANY
+     */
+    it('should create addMany with payload', () => {
+      const addMany = actionMap.addMany(parentUser, [{ name: 'Joshua' }])
+      expect(addMany.customer).toEqual([{ name: 'Joshua' }])
+      expect(addMany.type).toEqual('ngrx-poly/user/customer/add-many')
+    })
+
+    it('should create addManySuccess with payload', () => {
+      const addManySuccess = actionMap.addManySuccess({ rows: [{ name: 'Joshua' }], pagination: null })
+      expect(addManySuccess.rows).toEqual([{ name: 'Joshua' }])
+      expect(addManySuccess.pagination).toEqual(null)
+      expect(addManySuccess.type).toEqual('ngrx-poly/user/customer/add-many-success')
+    })
+
+    it('should create addManyFailure with error', () => {
+      const addManyFailure = actionMap.addManyFailure({ message: 'Failed' })
+      expect(addManyFailure.error).toEqual({ message: 'Failed' })
+      expect(addManyFailure.type).toEqual('ngrx-poly/user/customer/add-many-failure')
     })
 
     /**
      * FIND ONR
      */
-    it('should create delete with query', () => {
-      // deleteAction avoids collisions with the `delete` operator
-      const deleteAction = actionMap.delete(parentUser, 'john')
-      expect(deleteAction.id).toEqual('john')
-      expect(deleteAction.type).toEqual('ngrx-poly/user/customer/delete')
+    it('should create remove with query', () => {
+      const remove = actionMap.remove(parentUser, 'john')
+      expect(remove.id).toEqual('john')
+      expect(remove.type).toEqual('ngrx-poly/user/customer/remove')
     })
 
-    it('should create deleteSuccess with payload', () => {
-      const deleteSuccess = actionMap.deleteSuccess({ name: 'john' })
-      expect(deleteSuccess.customer).toEqual({ name: 'john' })
-      expect(deleteSuccess.type).toEqual('ngrx-poly/user/customer/delete-success')
+    it('should create removeSuccess with payload', () => {
+      const removeSuccess = actionMap.removeSuccess({ name: 'john' })
+      expect(removeSuccess.customer).toEqual({ name: 'john' })
+      expect(removeSuccess.type).toEqual('ngrx-poly/user/customer/remove-success')
     })
 
-    it('should create deleteFailure with error', () => {
-      const deleteFailure = actionMap.deleteFailure({ message: 'Failed' })
-      expect(deleteFailure.error).toEqual({ message: 'Failed' })
-      expect(deleteFailure.type).toEqual('ngrx-poly/user/customer/delete-failure')
+    it('should create removeFailure with error', () => {
+      const removeFailure = actionMap.removeFailure({ message: 'Failed' })
+      expect(removeFailure.error).toEqual({ message: 'Failed' })
+      expect(removeFailure.type).toEqual('ngrx-poly/user/customer/remove-failure')
     })
   })
 
@@ -237,67 +261,88 @@ describe('depthTwo action map', () => {
     })
 
     /**
-     * CREATE
+     * CREATE AND ADD
      */
-    it('should create create with payload', () => {
-      const create = actionMap.create(parentUser, { name: 'Joshua' })
-      expect(create.customer).toEqual({ name: 'Joshua' })
-      expect(create.type).toEqual('ngrx-poly/users/user/customer/create')
+    it('should create createAndAdd with payload', () => {
+      const createAndAdd = actionMap.createAndAdd(parentUser, { name: 'Joshua' })
+      expect(createAndAdd.customer).toEqual({ name: 'Joshua' })
+      expect(createAndAdd.type).toEqual('ngrx-poly/users/user/customer/create-and-add')
     })
 
-    it('should create createSuccess with payload', () => {
-      const createSuccess = actionMap.createSuccess({ name: 'Joshua' })
-      expect(createSuccess.customer).toEqual({ name: 'Joshua' })
-      expect(createSuccess.type).toEqual('ngrx-poly/users/user/customer/create-success')
+    it('should create createAndAddSuccess with payload', () => {
+      const createAndAddSuccess = actionMap.createAndAddSuccess({ name: 'Joshua' })
+      expect(createAndAddSuccess.customer).toEqual({ name: 'Joshua' })
+      expect(createAndAddSuccess.type).toEqual('ngrx-poly/users/user/customer/create-and-add-success')
     })
 
-    it('should create createFailure with error', () => {
-      const createFailure = actionMap.createFailure({ message: 'Failed' })
-      expect(createFailure.error).toEqual({ message: 'Failed' })
-      expect(createFailure.type).toEqual('ngrx-poly/users/user/customer/create-failure')
+    it('should createAndAdd createAndAddFailure with error', () => {
+      const createAndAddFailure = actionMap.createAndAddFailure({ message: 'Failed' })
+      expect(createAndAddFailure.error).toEqual({ message: 'Failed' })
+      expect(createAndAddFailure.type).toEqual('ngrx-poly/users/user/customer/create-and-add-failure')
     })
 
     /**
-     * UPDATE
+     * addOne
      */
-    it('should create update with payload', () => {
-      const update = actionMap.update(parentUser, { name: 'Joshua' })
-      expect(update.customer).toEqual({ name: 'Joshua' })
-      expect(update.type).toEqual('ngrx-poly/users/user/customer/update')
+    it('should create addOne with payload', () => {
+      const addOne = actionMap.addOne(parentUser, { name: 'Joshua' })
+      expect(addOne.customer).toEqual({ name: 'Joshua' })
+      expect(addOne.type).toEqual('ngrx-poly/users/user/customer/add-one')
     })
 
-    it('should create updateSuccess with payload', () => {
-      const updateSuccess = actionMap.updateSuccess({ name: 'Joshua' })
-      expect(updateSuccess.customer).toEqual({ name: 'Joshua' })
-      expect(updateSuccess.type).toEqual('ngrx-poly/users/user/customer/update-success')
+    it('should create addOneSuccess with payload', () => {
+      const addOneSuccess = actionMap.addOneSuccess({ name: 'Joshua' })
+      expect(addOneSuccess.customer).toEqual({ name: 'Joshua' })
+      expect(addOneSuccess.type).toEqual('ngrx-poly/users/user/customer/add-one-success')
     })
 
-    it('should create updateFailure with error', () => {
-      const updateFailure = actionMap.updateFailure({ message: 'Failed' })
-      expect(updateFailure.error).toEqual({ message: 'Failed' })
-      expect(updateFailure.type).toEqual('ngrx-poly/users/user/customer/update-failure')
+    it('should create addOneFailure with error', () => {
+      const addOneFailure = actionMap.addOneFailure({ message: 'Failed' })
+      expect(addOneFailure.error).toEqual({ message: 'Failed' })
+      expect(addOneFailure.type).toEqual('ngrx-poly/users/user/customer/add-one-failure')
+    })
+
+    /**
+     * ADD MANY
+     */
+    it('should create addMany with payload', () => {
+      const addMany = actionMap.addMany(parentUser, [{ name: 'Joshua' }])
+      expect(addMany.customer).toEqual([{ name: 'Joshua' }])
+      expect(addMany.type).toEqual('ngrx-poly/users/user/customer/add-many')
+    })
+
+    it('should create addManySuccess with payload', () => {
+      const addManySuccess = actionMap.addManySuccess({ rows: [{ name: 'Joshua' }], pagination: null })
+      expect(addManySuccess.rows).toEqual([{ name: 'Joshua' }])
+      expect(addManySuccess.pagination).toEqual(null)
+      expect(addManySuccess.type).toEqual('ngrx-poly/users/user/customer/add-many-success')
+    })
+
+    it('should create addManyFailure with error', () => {
+      const addManyFailure = actionMap.addManyFailure({ message: 'Failed' })
+      expect(addManyFailure.error).toEqual({ message: 'Failed' })
+      expect(addManyFailure.type).toEqual('ngrx-poly/users/user/customer/add-many-failure')
     })
 
     /**
      * FIND ONR
      */
-    it('should create delete with query', () => {
-      // deleteAction avoids collisions with the `delete` operator
-      const deleteAction = actionMap.delete(parentUser, 'steve')
-      expect(deleteAction.id).toEqual('steve')
-      expect(deleteAction.type).toEqual('ngrx-poly/users/user/customer/delete')
+    it('should create remove with query', () => {
+      const remove = actionMap.remove(parentUser, 'steve')
+      expect(remove.id).toEqual('steve')
+      expect(remove.type).toEqual('ngrx-poly/users/user/customer/remove')
     })
 
-    it('should create deleteSuccess with payload', () => {
-      const deleteSuccess = actionMap.deleteSuccess({ name: 'steve' })
-      expect(deleteSuccess.customer).toEqual({ name: 'steve' })
-      expect(deleteSuccess.type).toEqual('ngrx-poly/users/user/customer/delete-success')
+    it('should create removeSuccess with payload', () => {
+      const removeSuccess = actionMap.removeSuccess({ name: 'steve' })
+      expect(removeSuccess.customer).toEqual({ name: 'steve' })
+      expect(removeSuccess.type).toEqual('ngrx-poly/users/user/customer/remove-success')
     })
 
-    it('should create deleteFailure with error', () => {
-      const deleteFailure = actionMap.deleteFailure({ message: 'Failed' })
-      expect(deleteFailure.error).toEqual({ message: 'Failed' })
-      expect(deleteFailure.type).toEqual('ngrx-poly/users/user/customer/delete-failure')
+    it('should create removeFailure with error', () => {
+      const removeFailure = actionMap.removeFailure({ message: 'Failed' })
+      expect(removeFailure.error).toEqual({ message: 'Failed' })
+      expect(removeFailure.type).toEqual('ngrx-poly/users/user/customer/remove-failure')
     })
   })
 })

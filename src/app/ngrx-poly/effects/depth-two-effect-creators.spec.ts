@@ -31,7 +31,7 @@ class MyEffects {
 
   findAll$ = this.effects.findAll
   findOne$ = this.effects.findOne
-  create$ = this.effects.create
+  create$ = this.effects.createAndAdd
 
   constructor(private actions$: Actions, private service: Service) {}
 }
@@ -68,7 +68,7 @@ describe('DepthTwo EffectCreators', () => {
   }))
 
   it('should call findAll in service', async(async () => {
-    actions.next(actionMap.create(dummy, { name: 'Jonathan' }))
+    actions.next(actionMap.createAndAdd(dummy, { name: 'Jonathan' }))
     effects.findAll$.subscribe(() => {
       expect(service.create).toHaveBeenCalledWith({ name: 'steve' }, { name: 'Jonathan' })
     })

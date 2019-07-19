@@ -5,9 +5,9 @@ import { defaultInitialState } from '../reducers/state'
 const fromUsers = createFeatureSelector('users')
 
 const appSelectors = createRootSelectors('app')
-const appSelectorsWithAlternateSelected = createRootSelectors('app', state => state.ids[1])
+const appSelectorsWithAlternateSelected = createRootSelectors('app', state => state.app.ids[1])
 const userSelectors = createSelectors(fromUsers, 'users')
-const userSelectorsAlternateSelected = createSelectors(fromUsers, 'users', state => state.ids[1])
+const userSelectorsAlternateSelected = createSelectors(fromUsers, 'users', state => state.users.users.ids[1])
 
 const state = {
   users: {

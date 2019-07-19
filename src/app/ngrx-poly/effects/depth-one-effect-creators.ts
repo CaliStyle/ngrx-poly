@@ -3,14 +3,14 @@ import { of } from 'rxjs'
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators'
 import { ActionMapD1 } from '../actions/action-map'
 import { DepthOneDataServiceBase } from './depth-one-data-service'
-import { EffectsMap } from './effects-map'
+import { EffectsMapD1 } from './effects-map'
 import { Action } from '@ngrx/store'
 
 export function depthOneEffectCreators<T, U extends string>(
   actionMap: ActionMapD1<T, U>,
   actions$: Actions,
   dataService: DepthOneDataServiceBase<T>
-): EffectsMap {
+): EffectsMapD1 {
   return {
     findAll: createEffect(() =>
       actions$.pipe(
