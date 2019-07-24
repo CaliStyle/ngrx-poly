@@ -4,10 +4,8 @@ import { Todo } from '../../models/Todo'
 import { map } from 'rxjs/operators'
 import { EMPTY } from 'rxjs'
 
-export class HomeDataService extends DepthOneDataServiceBase<Todo> {
-  constructor(private httpClient: HttpClient) {
-    super()
-  }
+export class HomeDataService implements DepthOneDataServiceBase<Todo> {
+  constructor(private httpClient: HttpClient) {}
 
   findOne(query: any) {
     return this.httpClient.get<Todo>('https://jsonplaceholder.typicode.com/todos/1')

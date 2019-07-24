@@ -33,6 +33,10 @@ class MyEffects {
   findOne$ = this.effects.findOne
   create$ = this.effects.createAndAdd
 
+  onError$ = this.effects.setOnErrorEffect(() => {
+    return { type: 'ERROR' }
+  })
+
   constructor(private actions$: Actions, private service: Service) {}
 }
 
@@ -79,6 +83,14 @@ describe('DepthTwo EffectCreators', () => {
     // expect the effect to be called at some point
     effects.findOne$.subscribe(() => {
       expect(actionMap.findOneFailure).toHaveBeenCalled()
+    })
+  }))
+
+  it('should obey error effect', async(async () => {
+    actions.next(actionMap.findOneFailure({}))
+    // expect the effects to return an object
+    effects.findOne$.subscribe(errorAction => {
+      expect(errorAction).toEqual({ type: 'ERROR' })
     })
   }))
 })

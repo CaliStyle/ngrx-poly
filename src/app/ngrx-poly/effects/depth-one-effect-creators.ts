@@ -4,7 +4,8 @@ import { catchError, map, mergeMap, switchMap } from 'rxjs/operators'
 import { ActionMapD1 } from '../actions/action-map'
 import { DepthOneDataServiceBase } from './depth-one-data-service'
 import { EffectsMapD1 } from './effects-map'
-import { Action } from '@ngrx/store'
+import { Action, ActionCreator } from '@ngrx/store'
+import { FunctionWithParametersType } from '@ngrx/store/src/models'
 
 export function depthOneEffectCreators<T, U extends string>(
   actionMap: ActionMapD1<T, U>,
@@ -58,19 +59,22 @@ export function depthOneEffectCreators<T, U extends string>(
       )
     ),
 
-    create:
-      // createEffect(() =>
+    create: createEffect(() =>
       actions$.pipe(
         ofType(actionMap.create),
         switchMap(action => {
-          const entity = (action[actionMap._entity] as unknown) as T
-          return dataService.create(entity).pipe(
-            map(data => actionMap.createSuccess(data as T)),
-            catchError(error => of(actionMap.createFailure(error)))
-          )
+          try {
+            const entity = (action[actionMap._entity] as unknown) as T
+            return dataService.create(entity).pipe(
+              map(data => actionMap.createSuccess(data as T)),
+              catchError(error => of(actionMap.createFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.createFailure(e))
+          }
         })
-        // )
-      ),
+      )
+    ),
 
     update: createEffect(() =>
       actions$.pipe(
@@ -104,5 +108,27 @@ export function depthOneEffectCreators<T, U extends string>(
         })
       )
     ),
+    setOnErrorEffect: function(
+      onError: () => any,
+      dispatch: boolean = true,
+      ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
+    ) {
+      return createEffect(
+        () =>
+          actions$.pipe(
+            ofType(
+              actionMap.findAllFailure,
+              actionMap.searchFailure,
+              actionMap.findOneFailure,
+              actionMap.createFailure,
+              actionMap.updateFailure,
+              actionMap.deleteFailure,
+              ...additionalActions
+            ),
+            map(onError)
+          ),
+        { dispatch }
+      )
+    },
   }
 }

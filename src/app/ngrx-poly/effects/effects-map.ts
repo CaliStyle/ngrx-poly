@@ -1,9 +1,6 @@
-import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { ActionMapD1 } from '../actions/action-map'
-import { DepthOneDataServiceBase } from './depth-one-data-service'
-import { catchError, mergeMap, map } from 'rxjs/operators'
-import { of, Observable } from 'rxjs'
-import { Action } from '@ngrx/store'
+import { Action, ActionCreator } from '@ngrx/store'
+import { FunctionWithParametersType } from '@ngrx/store/src/models'
+import { Observable } from 'rxjs'
 
 export interface EffectsMapD1 {
   findAll: Observable<Action>
@@ -12,6 +9,11 @@ export interface EffectsMapD1 {
   create: Observable<Action>
   update: Observable<Action>
   delete: Observable<Action>
+  setOnErrorEffect: (
+    fn: () => any,
+    dispatch?: boolean,
+    ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
+  ) => Observable<any>
 }
 
 export interface EffectsMapD2 {
@@ -22,4 +24,9 @@ export interface EffectsMapD2 {
   addOne: Observable<Action>
   addMany: Observable<Action>
   remove: Observable<Action>
+  setOnErrorEffect: (
+    fn: () => any,
+    dispatch?: boolean,
+    ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
+  ) => Observable<any>
 }

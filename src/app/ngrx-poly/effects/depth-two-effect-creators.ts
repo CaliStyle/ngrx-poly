@@ -4,6 +4,8 @@ import { catchError, map, mergeMap } from 'rxjs/operators'
 import { ActionMapD2 } from '../actions/action-map'
 import { DepthTwoDataServiceBase } from './depth-two-data-service'
 import { EffectsMapD2 } from './effects-map'
+import { Action, ActionCreator } from '@ngrx/store'
+import { FunctionWithParametersType } from '@ngrx/store/src/models'
 
 export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends string>(
   actionMap: ActionMapD2<T, U, Tkey, Ukey>,
@@ -132,5 +134,28 @@ export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends s
         })
       )
     ),
+    setOnErrorEffect: function(
+      onError: () => any,
+      dispatch: boolean = true,
+      ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
+    ) {
+      return createEffect(
+        () =>
+          actions$.pipe(
+            ofType(
+              actionMap.findAllFailure,
+              actionMap.searchFailure,
+              actionMap.findOneFailure,
+              actionMap.createAndAddFailure,
+              actionMap.addOneFailure,
+              actionMap.addManyFailure,
+              actionMap.removeFailure,
+              ...additionalActions
+            ),
+            map(onError)
+          ),
+        { dispatch }
+      )
+    },
   }
 }
