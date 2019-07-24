@@ -10,7 +10,7 @@ export interface EffectsMapD1 {
   update: Observable<Action>
   delete: Observable<Action>
   setOnErrorEffect: (
-    fn: () => any,
+    fn: (error: any) => any,
     dispatch?: boolean,
     ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
   ) => Observable<any>
@@ -25,7 +25,7 @@ export interface EffectsMapD2 {
   addMany: Observable<Action>
   remove: Observable<Action>
   setOnErrorEffect: (
-    fn: () => any,
+    fn: (error: any) => any,
     dispatch?: boolean,
     ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
   ) => Observable<any>

@@ -31,8 +31,8 @@ class MyEffects {
   findOne$ = this.effects.findOne
   create$ = this.effects.create
 
-  onError$ = this.effects.setOnErrorEffect(() => {
-    return { type: 'ERROR' }
+  onError$ = this.effects.setOnErrorEffect((e: any) => {
+    return { type: 'ERROR', e }
   })
 
   constructor(private actions$: Actions, private service: Service) {}
@@ -87,8 +87,8 @@ describe('DepthOne EffectCreators', () => {
   it('should obey error effect', async(async () => {
     actions.next(actionMap.findOneFailure({}))
     // expect the effects to return an object
-    effects.findOne$.subscribe(errorAction => {
-      expect(errorAction).toEqual({ type: 'ERROR' })
+    effects.onError$.subscribe(errorAction => {
+      expect(errorAction).toEqual({ type: 'ERROR', e: {} })
     })
   }))
 })

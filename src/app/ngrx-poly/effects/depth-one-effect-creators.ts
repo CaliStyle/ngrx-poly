@@ -109,7 +109,7 @@ export function depthOneEffectCreators<T, U extends string>(
       )
     ),
     setOnErrorEffect: function(
-      onError: () => any,
+      onError: (error: any) => any,
       dispatch: boolean = true,
       ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
     ) {
@@ -125,7 +125,7 @@ export function depthOneEffectCreators<T, U extends string>(
               actionMap.deleteFailure,
               ...additionalActions
             ),
-            map(onError)
+            map(error => onError(error))
           ),
         { dispatch }
       )

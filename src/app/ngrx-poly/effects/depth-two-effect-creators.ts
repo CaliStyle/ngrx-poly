@@ -135,7 +135,7 @@ export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends s
       )
     ),
     setOnErrorEffect: function(
-      onError: () => any,
+      onError: (error: any) => any,
       dispatch: boolean = true,
       ...additionalActions: (string | ActionCreator<string, FunctionWithParametersType<any[], object>>)[]
     ) {
@@ -152,7 +152,7 @@ export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends s
               actionMap.removeFailure,
               ...additionalActions
             ),
-            map(onError)
+            map(error => onError(error))
           ),
         { dispatch }
       )
