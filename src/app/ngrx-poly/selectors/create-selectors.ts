@@ -31,24 +31,22 @@ const getAll = <T>() =>
 
 export function createSelectors<T>(
   featureSelector: MemoizedSelector<object, any>,
-  slice: string,
+  sliceSelector: (state: any) => PolyState<T>,
   selectedIdSelector?: MemoizedSelector<any, string | number> | Selector<PolyState<T>, string | number>
 ): SelectorMap<T> {
   const getState = createSelector<object, any, PolyState<T>>(
     featureSelector,
-    state => state[slice]
+    sliceSelector
   )
 
   return baseCreateSelectors(getState, selectedIdSelector)
 }
 
 export function createRootSelectors<T>(
-  slice: string,
+  sliceSelector: (state: any) => PolyState<T>,
   selectedIdSelector?: MemoizedSelector<any, string | number> | Selector<PolyState<T>, string | number>
 ): SelectorMap<T> {
-  const getState = state => state[slice] as PolyState<T>
-
-  return baseCreateSelectors(getState, selectedIdSelector)
+  return baseCreateSelectors(sliceSelector, selectedIdSelector)
 }
 
 function baseCreateSelectors<T>(
