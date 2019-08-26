@@ -20,6 +20,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
       actionMap.createAndAdd,
       actionMap.addOne,
       actionMap.addMany,
+      actionMap.update,
       actionMap.remove,
       state => ({
         ...state,
@@ -48,7 +49,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
         sort: pagination.sort,
       }
     }),
-    on(actionMap.findOneSuccess, actionMap.createAndAddSuccess, actionMap.addOneSuccess, (state, payload) => {
+    on(actionMap.findOneSuccess, actionMap.createAndAddSuccess, actionMap.addOneSuccess, actionMap.updateSuccess, (state, payload) => {
       const newEntity = (payload[entity] as unknown) as U
       const selectedId = keyGetter(newEntity)
 
@@ -105,6 +106,7 @@ export function depthTwoReducerCreator<T extends object, U extends object, Tkey 
       actionMap.createAndAddFailure,
       actionMap.addOneFailure,
       actionMap.addManyFailure,
+      actionMap.updateFailure,
       actionMap.removeFailure,
       (state, payload) => ({
         ...state,

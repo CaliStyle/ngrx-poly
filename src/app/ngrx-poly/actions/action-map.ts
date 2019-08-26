@@ -104,6 +104,10 @@ export interface ActionMapD2<T, U, Tkey extends string, Ukey extends string> {
   addOneSuccess: D1ActionWithEntity<U, Ukey>
   addOneFailure: ErrorAction
 
+  update: D2ActionWithEntity<T, U, Tkey, Ukey>
+  updateSuccess: D1ActionWithEntity<U, Ukey>
+  updateFailure: ErrorAction
+
   addMany: D2ActionWithEntities<T, U, Tkey, Ukey>
   addManySuccess: ActionCreator<string, (props: List<U>) => List<U> & TypedAction<string>>
   addManyFailure: ErrorAction

@@ -8,5 +8,6 @@ export interface DepthTwoDataServiceBase<T, U> {
   createAndAdd?(parent: T, obj: U): Observable<U>
   addOne?(parent: T, obj: U): Observable<U>
   addMany?(parent: T, objs: U[]): Observable<List<U>>
+  update?(parent: T, obj: U): Observable<U>
   remove?(parent: T, id: string | number): Observable<U>
 }

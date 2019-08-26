@@ -23,6 +23,7 @@ export interface EffectsMapD2 {
   createAndAdd: Observable<Action>
   addOne: Observable<Action>
   addMany: Observable<Action>
+  update: Observable<Action>
   remove: Observable<Action>
   setOnErrorEffect: (
     fn: (error: any) => any,

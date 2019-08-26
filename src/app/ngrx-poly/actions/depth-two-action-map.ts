@@ -64,6 +64,17 @@ export function depthTwo(feature: string) {
       ),
       createAndAddFailure: createAction(createActionType(Op.CREATE_AND_ADD_FAILURE, feature, parent, entity), (error: any) => ({ error })),
 
+      update: createAction(createActionType(Op.UPDATE, feature, parent, entity), (parentItem: T, item: U) =>
+        mapObjToPayloadD2(parent, entity, parentItem, item)
+      ),
+      updateSuccess: createAction(createActionType(Op.UPDATE_SUCCESS, feature, parent, entity), (item: U) =>
+        mapObjToPayloadD1(entity, item)
+      ),
+      updateFailure: createAction(createActionType(Op.UPDATE_FAILURE, feature, parent, entity), (error: any) => ({ error })),
+
+
+
+
       remove: createAction(
         createActionType(Op.REMOVE, feature, parent, entity),
         (parentItem: T, id: string | number) =>

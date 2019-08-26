@@ -118,6 +118,24 @@ export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends s
       )
     ),
 
+    update: createEffect(() =>
+      actions$.pipe(
+        ofType(actionMap.update),
+        mergeMap(action => {
+          try {
+            const parent = (action[actionMap._parent] as unknown) as T
+            const entity = (action[actionMap._entity] as unknown) as U
+            return dataService.update(parent, entity).pipe(
+              map(data => actionMap.updateSuccess(data)),
+              catchError(error => of(actionMap.updateFailure(error)))
+            )
+          } catch (e) {
+            return of(actionMap.updateFailure(e))
+          }
+        })
+      )
+    ),
+
     remove: createEffect(() =>
       actions$.pipe(
         ofType(actionMap.remove),
@@ -148,6 +166,7 @@ export function depthTwoEffectCreators<T, U, Tkey extends string, Ukey extends s
               actionMap.findOneFailure,
               actionMap.createAndAddFailure,
               actionMap.addOneFailure,
+              actionMap.updateFailure,
               actionMap.addManyFailure,
               actionMap.removeFailure,
               ...additionalActions
