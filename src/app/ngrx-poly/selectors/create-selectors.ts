@@ -29,9 +29,9 @@ const getAll = <T>() =>
     (entities: KeyMap<T>, ids: string[]) => ids.map(id => entities[id] as T)
   )
 
-export function createSelectors<T>(
+export function createSelectors<T, State>(
   featureSelector: MemoizedSelector<object, any>,
-  sliceSelector: (state: any) => PolyState<T>,
+  sliceSelector: (state: State) => PolyState<T>,
   selectedIdSelector?: MemoizedSelector<any, string | number> | Selector<PolyState<T>, string | number>
 ): SelectorMap<T> {
   const getState = createSelector<object, any, PolyState<T>>(
@@ -42,8 +42,8 @@ export function createSelectors<T>(
   return baseCreateSelectors(getState, selectedIdSelector)
 }
 
-export function createRootSelectors<T>(
-  sliceSelector: (state: any) => PolyState<T>,
+export function createRootSelectors<T, State>(
+  sliceSelector: (state: State) => PolyState<T>,
   selectedIdSelector?: MemoizedSelector<any, string | number> | Selector<PolyState<T>, string | number>
 ): SelectorMap<T> {
   return baseCreateSelectors(sliceSelector, selectedIdSelector)
